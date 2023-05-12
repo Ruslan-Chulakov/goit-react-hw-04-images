@@ -34,6 +34,7 @@ export const App = () => {
       .catch(error => {
         setStatus('rejected');
         setError(error);
+        stopLoader();
       });
   }, [searchRequest, page]);
 
@@ -54,7 +55,7 @@ export const App = () => {
       {status === 'rejected' && <div className={css.errorMessage}>{error}</div>}
       <ImageGallery data={data}  />
       {loaderState && <Loader />}
-      {searchRequest !== '' && !loaderState && (
+      {searchRequest !== '' && status === 'resolved' && !loaderState &&(
         <Button handleButton={handleLoadMoreButton} />
       )}
     </div>
