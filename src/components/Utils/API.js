@@ -9,8 +9,6 @@ async function fetchImage(toSearch, page, toggleloader) {
 
   const getImgData = await axios.get(request);
   const parsedImgData = await getImgData.data;
-  await toggleloader();
-
   if (parsedImgData.hits.length === 0) {
     return Promise.reject(
       'Sorry, there are no images matching your search query. Please try again.'

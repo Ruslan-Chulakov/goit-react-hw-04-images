@@ -14,7 +14,6 @@ const Searchbar = ({ onSubmit, toggleLoader }) => {
     evt.preventDefault();
 
     onSubmit(request.trim());
-    toggleLoader();
 
     setRequest('');
   };
@@ -42,7 +41,6 @@ const Searchbar = ({ onSubmit, toggleLoader }) => {
 
 Searchbar.propTypes = {
   onSubmit: PropTypes.func.isRequired,
-  toggleLoader: PropTypes.func.isRequired,
 };
 
 export default Searchbar;

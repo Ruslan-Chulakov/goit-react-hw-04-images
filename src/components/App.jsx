@@ -16,46 +16,45 @@ export const App = () => {
   const [loaderState, setLoaderState] = useState(false);
 
   useEffect(() => {
-      setData([]);
-    }, [searchRequest]);
+    setData([]);
+  }, [searchRequest]);
 
   useEffect(() => {
     if (searchRequest === '') {
       return;
     }
-    fetchImage(searchRequest, page, toggleLoader)
-      .then(newData => setData( prevData => [...prevData, ...newData.hits]))
+    const stopLoader = () => {
+      setLoaderState(false);
+    };
+
+    fetchImage(searchRequest, page)
+      .then(newData => setData(prevData => [...prevData, ...newData.hits]))
       .then(setStatus('resolved'))
+      .then(stopLoader)
       .catch(error => {
         setStatus('rejected');
         setError(error);
       });
   }, [searchRequest, page]);
 
-  const toggleLoader = () => {
-    setLoaderState(!loaderState);
-  };
-
   const handleSearchSubmit = searchRequest => {
+    setLoaderState(true)
     setSearchRequest(searchRequest);
     setPage(1);
   };
 
   const handleLoadMoreButton = () => {
-    toggleLoader();
+    setLoaderState(true);
     setPage(page + 1);
   };
 
   return (
     <div className={css.App}>
-      <Searchbar
-        onSubmit={handleSearchSubmit}
-        toggleLoader={toggleLoader}
-      />
+      <Searchbar onSubmit={handleSearchSubmit}  />
       {status === 'rejected' && <div className={css.errorMessage}>{error}</div>}
-      <ImageGallery data={data} toggleLoader={toggleLoader} />
+      <ImageGallery data={data}  />
       {loaderState && <Loader />}
-      {searchRequest !== '' && status === 'resolved' && (
+      {searchRequest !== '' && !loaderState && (
         <Button handleButton={handleLoadMoreButton} />
       )}
     </div>
